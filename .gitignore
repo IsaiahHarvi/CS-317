@@ -30,3 +30,11 @@
 *.exe
 *.out
 *.app
+
+.vscode/
+.vs/
+x64/
+*.vcxproj
+Sort/Sort.sln
+Sort/Sort.vcxproj.filters
+Sort/Sort.vcxproj.user
