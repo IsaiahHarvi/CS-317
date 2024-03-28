@@ -1,16 +1,17 @@
 // CS 317-01: Programming Assignment 1
 // Author:    Isaiah R. Harville
 // Date:      3/29/2024
-//
+// g++ -o program main.cpp
 #include <iostream>
 #include <fstream>
 #include <string.h>
 #include <algorithm>
 
+void quickSort(std::string arr[], int low, int high);
+int partition(std::string arr[], int low, int high);
 void mergeSort(std::string arr[], int left, int right);
 void merge(std::string arr[], int left, int middle, int right);
 std::string toLower(const std::string& str);
-std::string leftAlign(const std::string& str, size_t width);
 
 
 int main()
@@ -60,13 +61,13 @@ int main()
     }
 
     // Write quick sort
-    //quickSort(words)
+    //quickSort(words, 0, count-1);
 
     out_file << count << " words sorted using Quick Sort:\n";
     for (int i = 0; i < count; ++i) {
-        out_file << leftAlign(words[i], max_length) << ",";
+        out_file << words[i] << ",\t";
         if (!((i + 1) % words_per_line)) { out_file << "\n"; }
-    } out_file << "\n";
+    } out_file << "\n\n";
 
     std::reverse(words, words + count);
 
@@ -75,11 +76,34 @@ int main()
 
     out_file << count <<" words sorted using Merge Sort:\n";
     for (int i = 0; i < count; ++i) {
-        out_file << leftAlign(words[i], max_length) << ",";
+        out_file << words[i] << ",\t";
         if (!((i + 1) % words_per_line)) { out_file << "\n"; }
     } out_file << "\n";
 
     std::cout << "End of program." << std::endl;
+}
+
+void quickSort(std::string arr[], int low, int high) {
+    if (low < high) {
+        int p = partition(arr, low, high);
+
+        quickSort(arr, low, p - 1);
+        quickSort(arr, p + 1, high);
+    }
+}
+
+int partition(std::string arr[], int low, int high) {
+    std::string p = arr[high];   
+    int i = (low - 1);
+
+    for (int j = low; j <= high - 1; j++) {
+        if (toLower(arr[j]) <= toLower(p)) {
+            i++;
+            std::swap(arr[i], arr[j]);
+        }
+    }
+    std::swap(arr[i + 1], arr[high]);
+    return (i + 1);
 }
 
 void mergeSort(std::string arr[], int left, int right) {
@@ -143,8 +167,4 @@ std::string toLower(const std::string& str) {
     std::string lower = str;
     std::transform(lower.begin(), lower.end(), lower.begin(), ::tolower);
     return lower;
-}
-
-std::string leftAlign(const std::string& s, size_t w) {
-    return s + std::string(w - s.length(), '\t');
 }
